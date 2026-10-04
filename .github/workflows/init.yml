@@ -1,0 +1,28 @@
+name: Initialize Flutter Project
+on: [workflow_dispatch] # This allows you to run it manually
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          
+      - name: Create Project Structure
+        run: |
+          # Create a temp project to get the folders
+          flutter create . --force --project-name marvel_fitness_app
+          
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Generated Android and iOS folders"
+          git push
